@@ -29,9 +29,8 @@ jobs:
       - name: Add SSH key
         run: |
           mkdir -p ~/.ssh
-          printf '%s' "$SSH_PRIVATE_KEY" > ~/.ssh/grob_key
+          printf '%s' "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/grob_key
           chmod 600 ~/.ssh/grob_key
-          ssh-keygen -yf ~/.ssh/grob_key
 
       - name: Deploy
         env:
