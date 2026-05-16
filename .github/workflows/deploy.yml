@@ -26,15 +26,15 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Deploy to server
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST: 91.98.200.140
-          SSH_USER: root
+      - name: Add SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
-          rsync -az --delete astro.config.mjs tsconfig.json package.json package-lock.json nginx/ public/ src/ Dockerfile $SSH_USER@$SSH_HOST:/opt/grobacz.eu/
-          ssh $SSH_USER@$SSH_HOST "cd /opt/traefik && docker compose build grobacz-site && docker compose up -d grobacz-site"
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/grob_key
+          chmod 600 ~/.ssh/grob_key
+
+      - name: Deploy
+        env:
+          SSH_USER: root
+          SSH_HOST: 91.98.200.140
+        run: |
+          ssh -i ~/.ssh/grob_key -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "hostname && date"
