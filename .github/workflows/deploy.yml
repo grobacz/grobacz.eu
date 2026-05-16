@@ -28,11 +28,9 @@ jobs:
 
       - name: Add SSH key
         run: |
-          echo "secret length: ${#SSH_PRIVATE_KEY}"
-          KEY_FILE=$(mktemp)
-          printf '%s' "$SSH_PRIVATE_KEY" | base64 -d > "$KEY_FILE"
-          ls -la "$KEY_FILE"
-          wc -c "$KEY_FILE"
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/grob_key
+          chmod 600 ~/.ssh/grob_key
 
       - name: Deploy
         env:
