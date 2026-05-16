@@ -27,10 +27,9 @@ jobs:
         run: npm run build
 
       - name: Add SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/grob_key
-          chmod 600 ~/.ssh/grob_key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy
         env:
@@ -38,5 +37,5 @@ jobs:
           SSH_HOST: 91.98.200.140
         run: |
           ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts 2>/dev/null
-          rsync -az --delete astro.config.mjs tsconfig.json package.json package-lock.json nginx/ public/ src/ Dockerfile -e "ssh -i ~/.ssh/grob_key -o StrictHostKeyChecking=no" $SSH_USER@$SSH_HOST:/opt/grobacz.eu/
-          ssh -i ~/.ssh/grob_key -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd /opt/traefik && docker compose build grobacz-site && docker compose up -d grobacz-site"
+          rsync -az --delete astro.config.mjs tsconfig.json package.json package-lock.json nginx/ public/ src/ Dockerfile -e "ssh -o StrictHostKeyChecking=no" $SSH_USER@$SSH_HOST:/opt/grobacz.eu/
+          ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd /opt/traefik && docker compose build grobacz-site && docker compose up -d grobacz-site"
