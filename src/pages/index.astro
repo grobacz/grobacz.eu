@@ -1,0 +1,139 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import {
+  about,
+  contact,
+  hero,
+  highlightCards,
+  primaryLinks,
+  projects,
+  siteMeta,
+  strengths,
+} from "../data/portfolio";
+
+const navItems = [
+  { label: "work", href: "#work" },
+  { label: "strengths", href: "#strengths" },
+  { label: "about", href: "#about" },
+  { label: "contact", href: "#contact" },
+];
+
+const externalLinkAttrs = (href: string) =>
+  href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {};
+---
+
+<BaseLayout title={siteMeta.title} description={siteMeta.description}>
+  <main class="wrap">
+    <div class="window">
+      <div class="chrome">
+        <div class="dots" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <nav class="nav" aria-label="Primary">
+          {
+            navItems.map((item) => (
+              <a href={item.href}>{item.label}</a>
+            ))
+          }
+        </nav>
+        <div class="mono nav-label">{siteMeta.navLabel}</div>
+      </div>
+
+      <div class="page-body">
+        <section class="hero">
+          <div class="card hero-card">
+            <div class="prompt">{hero.prompt}</div>
+            <h1>
+              {hero.heading}
+              <span>{hero.subheading}</span>
+            </h1>
+            <p class="lead">{hero.intro}</p>
+            <p class="supporting">{hero.supportingText}</p>
+            <div class="quick-links">
+              {
+                primaryLinks.map((link) => (
+                  <a class="pill" href={link.href} {...externalLinkAttrs(link.href)}>
+                    {link.label}
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="rows">
+            {
+              highlightCards.map((card) => (
+                <article class="card stat-card">
+                  <div class="label">{card.label}</div>
+                  <h2 class="stat">{card.title}</h2>
+                  <p>{card.body}</p>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+
+        <section id="work">
+          <div class="section-title">
+            <h2>Selected Public Work</h2>
+            <p>A few public repos say more than a padded archive. These are the strongest visible signals from GitHub right now.</p>
+          </div>
+          <div class="rows">
+            {
+              projects.map((project) => (
+                <article class="row">
+                  <div class="mono project-id">{project.id}</div>
+                  <div>
+                    <h3><a href={project.href} target="_blank" rel="noreferrer">{project.title}</a></h3>
+                    <p>{project.summary}</p>
+                  </div>
+                  <aside>{project.details}</aside>
+                </article>
+              ))
+            }
+          </div>
+        </section>
+
+        <section class="split">
+          <article class="card" id="strengths">
+            <div class="label">strengths</div>
+            <ul>
+              {
+                strengths.map((strength) => (
+                  <li>{strength}</li>
+                ))
+              }
+            </ul>
+          </article>
+
+          <article class="card" id="about">
+            <div class="label">about</div>
+            {
+              about.map((paragraph) => (
+                <p class="about-copy">{paragraph}</p>
+              ))
+            }
+          </article>
+        </section>
+
+        <section id="contact" class="footer-box">
+          <div>
+            <div class="label">{contact.label}</div>
+            <p class="contact-copy">{contact.body}</p>
+          </div>
+          <div class="quick-links footer-links">
+            {
+              primaryLinks.map((link) => (
+                <a class="pill" href={link.href} {...externalLinkAttrs(link.href)}>
+                  {link.label}
+                </a>
+              ))
+            }
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</BaseLayout>

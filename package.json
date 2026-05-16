@@ -1,0 +1,17 @@
+{
+  "name": "grobacz.eu",
+  "version": "1.0.0",
+  "description": "Backend-focused portfolio site built with Astro.",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "astro": "^6.1.8"
+  }
+}
